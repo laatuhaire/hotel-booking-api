@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Secure role-based Hotel Booking API",
   "homepage": "https://github.com/laatuhaire/hotel-booking-api#readme",
-
   "bugs": {
     "url": "https://github.com/laatuhaire/hotel-booking-api/issues"
   },
@@ -19,7 +18,8 @@
     "start": "node src/api.js",
     "dev": "nodemon src/api.js",
     "dev-dep": "npm install && npm install nodemon morgan eslint eslint-config-prettier eslint-plugin-prettier prettier --save-dev -D",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrations:generate": "sequelize-cli migration:generate --migrations-path src/db/migrations --name"
   },
   "keywords": [
     "JWT",
@@ -29,6 +29,10 @@
   ],
   "dependencies": {
     "cors": "^2.8.6",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "sequelize": "^6.37.8"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.5"
   }
 }
