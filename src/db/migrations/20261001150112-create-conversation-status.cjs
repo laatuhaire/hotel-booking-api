@@ -3,29 +3,29 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // UP - create the 'booking_status' table
+    // UP - create the 'conversation_status' table
     await queryInterface.createTable(
-      'booking_status',
+      'conversation_status',
       {
         id: {
-          type: DataTypes.INTEGER,
+          type: Sequelize.INTEGER,
           allowNull: false,
           primaryKey: true,
           unique: true,
           autoIncrement: true,
         },
         name: {
-          type: DataTypes.STRING(30),
+          type: Sequelize.STRING(30),
           allowNull: false,
           unique: true,
         },
         created_at: {
-          type: DataTypes.DATE,
+          type: Sequelize.DATE,
           allowNull: false,
           defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         },
         updated_at: {
-          type: DataTypes.DATE,
+          type: Sequelize.DATE,
           allowNull: false,
           defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         },
@@ -34,7 +34,7 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    // DOWN - Drop the 'booking_status' table
-    await queryInterface.dropTable('booking_status');
+    // UP - create the 'conversation_status' table
+    await queryInterface.dropTable('conversation_status');
   }
 };

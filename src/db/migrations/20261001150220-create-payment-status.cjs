@@ -2,30 +2,30 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    // UP - create the 'payment_method' table
-    await queryInterface.createTable(
-      'payment_method',
+  async up(Sequelize, Sequelize) {
+    // UP - create the 'payment_status' table
+    await Sequelize.createTable(
+      'payment_status',
       {
         id: {
-          type: DataTypes.INTEGER,
+          type: Sequelize.INTEGER,
           allowNull: false,
           primaryKey: true,
           unique: true,
           autoIncrement: true,
         },
         name: {
-          type: DataTypes.STRING(30),
+          type: Sequelize.STRING(30),
           allowNull: false,
           unique: true,
         },
         created_at: {
-          type: DataTypes.DATE,
+          type: Sequelize.DATE,
           allowNull: false,
           defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         },
         updated_at: {
-          type: DataTypes.DATE,
+          type: Sequelize.DATE,
           allowNull: false,
           defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         },
@@ -33,8 +33,8 @@ module.exports = {
     );
   },
 
-  async down(queryInterface, Sequelize) {
-    // DOWN - Drop the 'payment_method' table
-    await queryInterface.dropTable('payment_method');
+  async down(Sequelize, Sequelize) {
+    // DOWN - Drop the 'payment_status' table
+    await Sequelize.dropTable('payment_status');
   }
 };

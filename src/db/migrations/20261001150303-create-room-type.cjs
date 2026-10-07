@@ -2,9 +2,9 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(Sequelize, Sequelize) {
     // UP - create the 'room_type' table
-    await queryInterface.createTable(
+    await Sequelize.createTable(
       'room_type',
       {
         id: {
@@ -49,18 +49,18 @@ module.exports = {
     );
 
     // CHECK constraint: price_per_night between 10 and 10000
-    await queryInterface.sequelize.query(
+    await Sequelize.sequelize.query(
       'ALTER TABLE "room_type" ADD CONSTRAINT "chk_room_type_price_per_night" CHECK ("price_per_night" BETWEEN 10 AND 10000);'
     );
 
     // CHECK constraint: max_occupancy between 1 and 10
-    await queryInterface.sequelize.query(
+    await Sequelize.sequelize.query(
       'ALTER TABLE "room_type" ADD CONSTRAINT "chk_room_type_max_occupancy" CHECK ("max_occupancy" BETWEEN 1 AND 10);'
     );
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(Sequelize, Sequelize) {
     // UP - create the 'room_type' table
-    await queryInterface.dropTable('room_type');
+    await Sequelize.dropTable('room_type');
   }
 };
