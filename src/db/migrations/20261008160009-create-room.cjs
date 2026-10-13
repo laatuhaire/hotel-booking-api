@@ -3,9 +3,9 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // UP - create the 'payment' table\
+    // UP - create the 'room' table
     await queryInterface.createTable(
-      'payment',
+      'room',
       {
         id: {
           type: Sequelize.INTEGER,
@@ -14,49 +14,30 @@ module.exports = {
           unique: true,
           autoIncrement: true,
         },
-        booking: {
+        number: {
+          type: Sequelize.STRING(10),
+          allowNull: false,
+          unique: true,
+        },
+        type: {
           type: Sequelize.INTEGER,
           allowNull: false,
           references: {
-            model: 'booking',
+            model: 'room_type',
             key: 'id',
           },
           onDelete: 'RESTRICT',
           onUpdate: 'CASCADE',
         },
-        amount: {
-          type: Sequelize.DECIMAL(10, 2),
+        floor: {
+          type: Sequelize.SMALLINT,
           allowNull: false,
-        },
-        method: {
-          type: Sequelize.INTEGER,
-          allowNull: false,
-          references: {
-            model: 'payment_method',
-            key: 'id',
-          },
-          onDelete: 'RESTRICT',
-          onUpdate: 'CASCADE',
         },
         status: {
           type: Sequelize.INTEGER,
           allowNull: false,
           references: {
-            model: 'payment_status',
-            key: 'id',
-          },
-          onDelete: 'RESTRICT',
-          onUpdate: 'CASCADE',
-        },
-        paid_at: {
-          type: Sequelize.DATE,
-          allowNull: false,
-        },
-        processed_by: {
-          type: Sequelize.INTEGER,
-          allowNull: false,
-          references: {
-            model: 'user',
+            model: 'room_status',
             key: 'id',
           },
           onDelete: 'RESTRICT',
@@ -77,7 +58,7 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    // DOWN - drop the 'payment' table
-    await queryInterface.createTable('payment');
+    // DOWN - drop the 'room' table
+    await queryInterface.dropTable('room');
   }
 };

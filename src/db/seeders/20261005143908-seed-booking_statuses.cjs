@@ -5,12 +5,12 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.sequelize.query(`
       INSERT INTO booking_status (name, created_at, updated_at) VALUES
-        ('Pending'      NOW(), NOW()),
-        ('Confirmed'    NOW(), NOW()),
-        ('Checked-in'   NOW(), NOW()),
-        ('Checked-out'  NOW(), NOW()),
-        ('Cancelled'    NOW(), NOW()),
-        ('Now show'     NOW(), NOW())
+        ('Pending',      NOW(), NOW()),
+        ('Confirmed',    NOW(), NOW()),
+        ('Checked-in',   NOW(), NOW()),
+        ('Checked-out',  NOW(), NOW()),
+        ('Cancelled',    NOW(), NOW()),
+        ('Now show',     NOW(), NOW())
       ON CONFLICT (name) DO NOTHING;
     `);
   },

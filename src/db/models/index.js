@@ -3,7 +3,8 @@
 
 // ---------------------------- User domain ------------------------------------
 import { User } from './user.js';
-import { Role } from './userRole.js';
+//import { Role } from './userRole.js';
+import { UserRole } from './userRole.js';
 import { UserStatus } from './userStatus.js';
 import { Phone } from './phone.js';
 
@@ -33,14 +34,14 @@ export function setAssociations() {
   // --------------------- User domain associations ----------------------------
 
   // A role can have many users
-  Role.hasMany(User, {
+  UserRole.hasMany(User, {
     foreignKey: 'role',
     sourceKey: 'id',
     as: 'users',
   });
 
   // A user belongs to one role
-  User.belongsTo(Role, {
+  User.belongsTo(UserRole, {
     foreignKey: 'role',
     targetKey: 'id',
     as: 'roleData',

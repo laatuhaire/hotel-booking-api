@@ -1,7 +1,7 @@
 // Import the centralized API configuration, which resolves all
 // Environment variables
-import { config } from '../config/config.js'
-
+//import { config } from '../config/config.js'
+import { config } from '../../config/config.js'
 /**
  * Sequelize database configuration object
  *

@@ -2,10 +2,10 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(Sequelize, Sequelize) {
-    // UP - create the 'payment_status' table
-    await Sequelize.createTable(
-      'payment_status',
+  async up(queryInterface, Sequelize) {
+    // UP - create the 'phone' table
+    await queryInterface.createTable(
+      'phone',
       {
         id: {
           type: Sequelize.INTEGER,
@@ -14,10 +14,20 @@ module.exports = {
           unique: true,
           autoIncrement: true,
         },
-        name: {
-          type: Sequelize.STRING(30),
+        number: {
+          type: Sequelize.STRING(20),
           allowNull: false,
           unique: true,
+        },
+        user: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          references: {
+            model: 'user',
+            key: 'id',
+          },
+          onDelete: 'RESTRICT',
+          onUpdate: 'CASCADE',
         },
         created_at: {
           type: Sequelize.DATE,
@@ -33,8 +43,8 @@ module.exports = {
     );
   },
 
-  async down(Sequelize, Sequelize) {
-    // DOWN - Drop the 'payment_status' table
-    await Sequelize.dropTable('payment_status');
+  async down(queryInterface, Sequelize) {
+    // DOWN - drop the 'phone' table
+    await queryInterface.dropTable('phone');
   }
 };

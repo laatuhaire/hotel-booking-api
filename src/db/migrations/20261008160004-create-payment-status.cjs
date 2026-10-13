@@ -1,75 +1,40 @@
 'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
-
 module.exports = {
-
-  async up(Sequelize, Sequelize) {
-
-    // UP - create the 'room' table
-
-    await Sequelize.createTable(
-
-      'room',
-
+  async up(queryInterface, Sequelize) {
+    // UP - create the 'payment_status' table
+    await queryInterface.createTable(
+      'payment_status',
       {
-
         id: {
-
           type: Sequelize.INTEGER,
-
           allowNull: false,
-
           primaryKey: true,
-
           unique: true,
-
           autoIncrement: true,
-
         },
-
-        room_number: {
-
+        name: {
           type: Sequelize.STRING(30),
-
           allowNull: false,
-
           unique: true,
-
         },
-
         created_at: {
-
           type: Sequelize.DATE,
-
           allowNull: false,
-
           defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-
         },
-
         updated_at: {
-
           type: Sequelize.DATE,
-
           allowNull: false,
-
           defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-
         },
-
       }
-
     );
-
   },
 
-  async down(Sequelize, Sequelize) {
-
-    // DOWN - Drop the 'room' table
-
-    await Sequelize.dropTable('room');
-
+  async down(queryInterface, Sequelize) {
+    // DOWN - drop the 'payment_status' table
+    await queryInterface.dropTable('payment_status');
   }
-
 };

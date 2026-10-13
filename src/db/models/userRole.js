@@ -7,7 +7,8 @@ import { DataTypes } from 'sequelize';
 export const ROLE_TABLE = 'user_role';
 
 // Define the role model
-export const Role = sequelize.define(
+//export const Role = sequelize.define(
+export const UserRole = sequelize.define(  
   // Table name
   ROLE_TABLE,
   // Table columns

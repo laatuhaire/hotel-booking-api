@@ -3,9 +3,9 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // UP - create the 'booking' table
+    // UP - create the 'payment' table
     await queryInterface.createTable(
-      'booking',
+      'payment',
       {
         id: {
           type: Sequelize.INTEGER,
@@ -14,65 +14,53 @@ module.exports = {
           unique: true,
           autoIncrement: true,
         },
-        guest: {
+        booking: {
           type: Sequelize.INTEGER,
           allowNull: false,
           references: {
-            model: 'user',
+            model: 'booking',
             key: 'id',
           },
           onDelete: 'RESTRICT',
           onUpdate: 'CASCADE',
         },
-        room: {
+        amount: {
+          type: Sequelize.DECIMAL(10, 2),
+          allowNull: false,
+        },
+        method: {
           type: Sequelize.INTEGER,
           allowNull: false,
           references: {
-            model: 'room',
+            model: 'payment_method',
             key: 'id',
           },
           onDelete: 'RESTRICT',
           onUpdate: 'CASCADE',
-        },
-        created_by: {
-          type: Sequelize.INTEGER,
-          allowNull: false,
-          references: {
-            model: 'user',
-            key: 'id',
-          },
-          onDelete: 'RESTRICT',
-          onUpdate: 'CASCADE',
-        },
-        check_in_date: {
-          type: Sequelize.DATEONLY,
-          allowNull: false,
-        },
-        check_out_date: {
-          type: Sequelize.DATEONLY,
-          allowNull: false,
-        },
-        guests_count: {
-          type: Sequelize.SMALLINT,
-          allowNull: false,
         },
         status: {
           type: Sequelize.INTEGER,
           allowNull: false,
           references: {
-            model: 'booking_status',
+            model: 'payment_status',
             key: 'id',
           },
           onDelete: 'RESTRICT',
           onUpdate: 'CASCADE',
         },
-        total_price: {
-          type: Sequelize.DECIMAL(10, 2),
+        paid_at: {
+          type: Sequelize.DATE,
           allowNull: false,
         },
-        cancelled_at: {
-          type: Sequelize.DATE,
-          allowNull: true,
+        processed_by: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          references: {
+            model: 'user',
+            key: 'id',
+          },
+          onDelete: 'RESTRICT',
+          onUpdate: 'CASCADE',
         },
         created_at: {
           type: Sequelize.DATE,
@@ -87,22 +75,14 @@ module.exports = {
       }
     );
 
-    // CHECK constraint: check_out_date must be after check_in_date
+    // CHECK constraint: amount must be >= 0
     await queryInterface.sequelize.query(
-      'ALTER TABLE "booking" ADD CONSTRAINT "chk_booking_dates" CHECK ("check_out_date" > "check_in_date");'
+      'ALTER TABLE "payment" ADD CONSTRAINT "chk_payment_amount" CHECK ("amount" >= 0)'
     );
-
-    // CHECK constraint: total_price must be >= 0
-    await queryInterface.sequelize.query(
-      'ALTER TABLE "booking" ADD CONSTRAINT "chk_booking_total_price" CHECK ("total_price" >= 0)'
-    );
-
-    // CHECK constraint: quest_count must be >= 1 and <= 10
-    'ALTER TABLE "booking" ADD CONSTRAINT "chk_booking_guest_count" CHECK ("guests_count" >= 1 AND "guests_count" <= 10)'
   },
 
   async down(queryInterface, Sequelize) {
-    // DOWN - drop the 'booking' table
-    await queryInterface.dropTable('booking');
+    // DOWN - drop the 'payment' table
+    await queryInterface.dropTable('payment');
   }
 };

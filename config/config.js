@@ -23,7 +23,7 @@ export const config = {
   // Database port
   dbPort: process.env.DB_PORT,
   // API key for the authentication application
-  APIkey: process.env.API_KEY,
+  APIKey: process.env.API_KEY,
   // JWT secret key for the user authentication
   authAppJwtKey: process.env.AUTH_API_JWT_SECRET_KEY,
   // Allowed front-end origin for CORS request
