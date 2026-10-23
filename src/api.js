@@ -13,8 +13,8 @@ import cors from 'cors';
 import morgan from 'morgan';
 // Function to test database connection
 import { testConnection } from './libraries/DBConnection.js';
-// Import the IP address and port from the network configuration module
-import { theIPAddress, port } from './libraries/netConfig.js';
+// Import the port from the network configuration module
+import { port } from './libraries/netConfig.js';
 
 // Main router for the API
 import routerAPI from './routes/index.js';
@@ -79,10 +79,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Immediately Invoked Function Expression (IIFE) to run the server
 (async () => {
-  // Await the api to start listening on the specified IP address and port
-  const createApi = await api.listen(port, theIPAddress, (req, res) => {
+  // Listen on all network interfaces (0.0.0.0) so that 127.0.0.1, localhost
+  // and the LAN/adapter IP addresses can all reach the API
+  api.listen(port, '0.0.0.0', () => {
     // Log the server start information to the console
-    console.log(`Server on port http://${theIPAddress}:${port}`);
+    console.log(`Server on port http://127.0.0.1:${port}`);
   });
 })();
 

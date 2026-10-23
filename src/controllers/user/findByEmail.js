@@ -38,6 +38,7 @@ export const findByEmailUser = async (req, res, next) => {
         success: true,
         message: 'User found successfully',
         user: userData,
+        authentication: res.locals.newUserToken,
       });
     }
   } catch (err) {

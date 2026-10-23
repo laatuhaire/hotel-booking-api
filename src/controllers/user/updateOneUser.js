@@ -55,6 +55,7 @@ export const updateOneUser = async (req, res, next) => {
       return res.status(200).json({
         success: true,
         message: 'User updated successfully',
+        authentication: res.locals.newUserToken,
       });
     }
   } catch (err) {

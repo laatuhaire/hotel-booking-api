@@ -6,7 +6,13 @@ import { Router } from "express";
 import { checkAPIkey } from '../middlewares/apiAuthHandler.js';
 // Middleware that verifies the user JWT
 import { authAppVerifyToken} from '../middlewares/tokenHandlers/authAppTokenHandler.js';
+// Middleware that validate the user's role
+import { checkRole } from '../middlewares/checkRoleHandler.js';
+// Middleware that validate the Joi Schema
+import { validatorHandler} from '../middlewares/validatorHandler.js';
+
 // -------------------------- Validator Schema ---------------------------------
+import { userSchema } from '../schema/userSchema.js';
 
 // ----------------------------- Controllers -----------------------------------
 import {
@@ -33,7 +39,11 @@ userRouter.post(
   checkAPIkey,
   // Step 2: Verify the session token
   authAppVerifyToken,
-  // Step 3: Delegate to the controller
+  // Step 3: Verify the user role
+  checkRole(['Administrator']),
+  // Step 4: Validate the payload schema
+  validatorHandler(userSchema.newUserData, 'body'),
+  // Step 5: Delegate to the controller
   createOneUser
 );
 
@@ -47,7 +57,11 @@ userRouter.put(
   checkAPIkey,
   // Step 2: Verify the session token
   authAppVerifyToken,
-  // Step 3: Delegate to the controller
+  // Step 3: Verify the user role
+  checkRole(['Administrator']),
+  // Step 4: Validate the payload schema
+  validatorHandler(userSchema.updateUserData, 'body'),
+  // Step 5: Delegate to the controller
   updateOneUser
 );
 
@@ -61,7 +75,11 @@ userRouter.put(
   checkAPIkey,
   // Step 2: Verify the session token
   authAppVerifyToken,
-  // Step 3: Delegate to the controller
+  // Step 3: Verify the user role
+  checkRole(['Administrator']),
+  // Step 4: Validate the payload schema
+  validatorHandler(userSchema.updateUserPhones, 'body'),
+  // Step 5: Delegate to the controller
   updateUserPhones
 );
 
@@ -75,7 +93,11 @@ userRouter.post(
   checkAPIkey,
   // Step 2: Verify the session token
   authAppVerifyToken,
-  // Step 3: Delegate to the controller
+  // Step 3: Verify the user role
+  checkRole(['Administrator']),
+  // Step 4: Validate the payload schema
+  validatorHandler(userSchema.getUserById, 'body'),
+  // Step 5: Delegate to the controller
   updateLastLoginUser
 );
 
@@ -89,7 +111,11 @@ userRouter.delete(
   checkAPIkey,
   // Step 2: Verify the session token
   authAppVerifyToken,
-  // Step 3: Delegate to the controller
+  // Step 3: Verify the user role
+  checkRole(['Administrator']),
+  // Step 4: Validate the payload schema
+  validatorHandler(userSchema.getUserById, 'body'),
+  // Step 5: Delegate to the controller
   deleteOneUser
 );
 
@@ -103,7 +129,11 @@ userRouter.post(
   checkAPIkey,
   // Step 2: Verify the session token
   authAppVerifyToken,
-  // Step 3: Delegate to the controller
+  // Step 3: Verify the user role
+  checkRole(['Administrator']),
+  // Step 4: Validate the payload schema
+  validatorHandler(userSchema.getUserById, 'body'),
+  // Step 5: Delegate to the controller
   listOneUser
 );
 
@@ -117,7 +147,11 @@ userRouter.post(
   checkAPIkey,
   // Step 2: Verify the session token
   authAppVerifyToken,
-  // Step 3: Delegate to the controller
+  // Step 3: Verify the user role
+  checkRole(['Administrator']),
+  // Step 4: Validate the payload schema
+  validatorHandler(userSchema.getByEmail, 'body'),
+  // Step 5: Delegate to the controller
   findByEmailUser
 );
 
@@ -131,7 +165,9 @@ userRouter.get(
   checkAPIkey,
   // Step 2: Verify the session token
   authAppVerifyToken,
-  // Step 3: Delegate to the controller
+  // Step 3: Verify the user role
+  checkRole(['Administrator']),
+  // Step 4: Delegate to the controller
   listAllUsers
 );
 

@@ -39,6 +39,7 @@ export const updateUserPhones = async (req, res, next) => {
         success: true,
         message: 'User phones updated successfully',
         phones: response.phones,
+        authentication: res.locals.newUserToken,
       });
     }
   } catch (err) {

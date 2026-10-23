@@ -29,6 +29,7 @@ export const listAllUsers = async (req, res, next) => {
         message: 'Users found successfully',
         total: response.total,
         users: response.usersData,
+        authentication: res.locals.newUserToken,
       });
     }
   } catch (err) {

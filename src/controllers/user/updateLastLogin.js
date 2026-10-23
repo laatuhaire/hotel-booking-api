@@ -34,6 +34,7 @@ export const updateLastLoginUser = async (req, res, next) => {
       return res.status(200).json({
         success: true,
         message: 'Last login updated successfully',
+        authentication: res.locals.newUserToken,
       });
     }
   } catch (err) {

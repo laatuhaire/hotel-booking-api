@@ -50,6 +50,7 @@ export const createOneUser = async (req, res, next) => {
       return res.status(201).json({
         success: true,
         message: 'User created successfully',
+        authentication: res.locals.newUserToken, //inner object locals
       });
     }
   } catch (err) {
