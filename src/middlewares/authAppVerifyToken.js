@@ -2,7 +2,7 @@
 import jwt from 'jsonwebtoken';
 // Import the centralized API configuration, which resolves all
 // Environment variables
-import { config } from '../../../config/config.js';
+import { config } from '../config/config.js';
 // Import the authentication utility module to sign JWT token
 import { signUserToken } from '../../utils/auth/tokenSign.js';
 

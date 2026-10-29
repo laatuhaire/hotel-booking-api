@@ -1,7 +1,7 @@
 // Import the Sequelize constructor form the 'sequelize` library
 import { Sequelize} from 'sequelize';
 // Import the configuration settings
-import { config } from '../../config/config.js';
+import { config } from '../config/config.js';
 
 // Create a new instance of Sequelize with the provided credentials and options
 export const sequelize = new Sequelize(

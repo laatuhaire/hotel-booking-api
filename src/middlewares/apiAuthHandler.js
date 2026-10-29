@@ -2,7 +2,7 @@
 import Boom from '@hapi/boom';
 // Import the centralized API configuration, which resolves all
 // Environment variables
-import { config } from '../../config/config.js';
+import { config } from '../config/config.js';
 
 /**
  * Middleware to check if the provided API key is valid.

@@ -2,7 +2,7 @@
 import os from 'os';
 
 // Import the configuration object from the config file
-import { config } from "../../config/config.js";
+import { config } from "../config/config.js";
 
 // Get the network interfaces from the operating system
 const interfaces = os.networkInterfaces();

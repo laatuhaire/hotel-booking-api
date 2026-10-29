@@ -19,7 +19,7 @@ import bcrypt from 'bcryptjs';
 import { hashPassword } from '../utils/auth/passwordHash.js';
 // Import the centralized API configuration, which resolves all
 // Environment variables
-import { config } from '../../config/config.js';
+import { config } from '../config/config.js';
 // boom allows managing possible errors
 import Boom from '@hapi/boom';
 

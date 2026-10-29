@@ -2,7 +2,7 @@
 import { verifyToken } from '../utils/auth/tokenVerify.js';
 // Import the centralized API configuration, which resolves all
 // Environment variables
-import { config } from '../../config/config.js';
+import { config } from '../config/config.js';
 
 /**
  * Middleware to check user roles based on the decoded JWT payload
