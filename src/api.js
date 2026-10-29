@@ -13,23 +13,23 @@ import cors from 'cors';
 import morgan from 'morgan';
 // Function to test database connection
 import { testConnection } from './libraries/DBConnection.js';
-// Import the port from the network configuration module
-import { port } from './libraries/netConfig.js';
-
+// Import the IP address and port from the network configuration module
+import { theIPAddress, port } from './libraries/netConfig.js';
 // Main router for the API
 import routerAPI from './routes/index.js';
+// Import the GraphQL with the Apollo server instance
+import { useGraphql } from './graphql/index.js';
+// Import the webSocket initialization
+import { initSocket } from './sockets/index.js';
 // Import the configuration module
-//import { config } from './config/config.js';
-import { config } from '../config/config.js';
-//Create error handling middlewares
-import { 
-    logError, 
-    errorHandler, 
-    boomErrorHandler, 
-    ORMErrorHandler 
-} from './middlewares/errorHandler.js';   
-
-
+import { config } from './config/config.js';
+// Custom error handling middlewares
+import {
+  logError,
+  errorHandler,
+  boomErrorHandler,
+  ORMErrorHandler
+} from './middlewares/errorHandler.js';
 // Import the setup of the database entities associations
 import { setAssociations } from './db/models/index.js';
 
@@ -56,9 +56,20 @@ api.use(morgan('dev'));
 // Configure CORS to allow requests from the configured frontend origin.
 // Mounted before the body parsers and the routers so preflight OPTIONS
 // requests (which carry no apikey/Authorization headers) are answered here
-// and never reach checkApiKey.
+// and never reach checkAPIkey.
+const allowedOrigins = [
+  config.corsOrigin,
+  ...(config.env === 'development'
+    ? [
+      'https://sandbox.embed.apollographql.com',
+      'https://studio.apollographql.com',
+    ]
+    : []
+  ),
+];
+
 api.use(cors({
-  origin: config.corsOrigin,
+  origin: allowedOrigins,
   allowedHeaders: ['Content-Type', 'Authorization', 'apikey'],
   // Headers the browser is allowed to read from the response:
   // - X-Access-Token: the rotated JWT
@@ -66,12 +77,19 @@ api.use(cors({
   exposedHeaders: ['X-Access-Token', 'Retry-After', 'RateLimit'],
 }));
 
-// Middleware to parse URL-encoded data
-api.use(express.urlencoded({ extended: false }));
-// Middleware to parse JSON data
-api.use(express.json());
 // Middleware for parsing JSON bodies
 api.use(bodyParser.json());
+
+// GraphQL - Layer - mounted BEFORE body parsers because Apollo Server
+// parses the request stream itself. CORS stays above so preflights are
+// answered at the edge.
+await useGraphql(api);
+
+// Middleware to parse URL-encoded data
+api.use(express.urlencoded({ extended: false }));
+
+// Middleware to parse JSON data
+api.use(express.json());
 
 // Static files path
 // Store in the constant the project dirname
@@ -79,12 +97,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Immediately Invoked Function Expression (IIFE) to run the server
 (async () => {
-  // Listen on all network interfaces (0.0.0.0) so that 127.0.0.1, localhost
-  // and the LAN/adapter IP addresses can all reach the API
-  api.listen(port, '0.0.0.0', () => {
+  // Await the api to start listening on the specified IP address and port
+  const httpServer = await api.listen(port, theIPAddress, (req, res) => {
     // Log the server start information to the console
-    console.log(`Server on port http://127.0.0.1:${port}`);
+    console.log(`Server on port http://${theIPAddress}:${port}`);
   });
+
+  const io = initSocket(httpServer);
+  api.set('io', io);
 })();
 
 // Set up all Sequelize models associations before any database query is made
