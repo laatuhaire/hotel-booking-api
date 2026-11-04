@@ -1,27 +1,80 @@
+# Setting shared by all PostgreSQL containers
+x-postgres: &postgres-base
+  image: postgres:16
+  restart: always
+  command: ["postgres", "-c", "timezone=UTC", "-c", "log_timezone=UTC"]
+  networks:
+    - hotel-booking-network
+
 services:
-  hotel-booking-db:
-    image: postgres:16
-    container_name: hotel-booking-db
-    restart: always
-    command: ["postgres", "-c", "timezone=UTC", "-c", "log_timezone=UTC"]
+
+  # -------------------------- Development DB ----------------------------------
+
+  hotel-booking-db-dev:
+    <<: *postgres-base
+    container_name: hotel-booking-db-dev
     environment:
       TZ: UTC
       PGTZ: UTC
-      PGPORT: ${DB_CONTAINER_PORT}
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      PGPORT: ${DEV_DB_CONTAINER_PORT}
+      POSTGRES_DB: ${DEV_DB_NAME}
+      POSTGRES_USER: ${DEV_DB_USER}
+      POSTGRES_PASSWORD: ${DEV_DB_PASSWORD}
     ports:
-      - "${DB_PORT}:${DB_CONTAINER_PORT}"
+      - "${DEV_DB_PORT}:${DEV_DB_CONTAINER_PORT}"
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - pg_data_dev:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB} -p $${PGPORT}"]
       interval: 5s
       timeout: 5s
       retries: 10
-    networks:
-      - hotel-booking-network
+
+  # ----------------------------- Test DB --------------------------------------
+
+  hotel-booking-db-test:
+    <<: *postgres-base
+    container_name: hotel-booking-db-test
+    environment:
+      TZ: UTC
+      PGTZ: UTC
+      PGPORT: ${TEST_DB_CONTAINER_PORT}
+      POSTGRES_DB: ${TEST_DB_NAME}
+      POSTGRES_USER: ${TEST_DB_USER}
+      POSTGRES_PASSWORD: ${TEST_DB_PASSWORD}
+    ports:
+      - "${TEST_DB_PORT}:${TEST_DB_CONTAINER_PORT}"
+    volumes:
+      - pg_data_test:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB} -p $${PGPORT}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # -------------------------- Production DB -----------------------------------
+
+  hotel-booking-db-prod:
+    <<: *postgres-base
+    container_name: hotel-booking-db-prod
+    environment:
+      TZ: UTC
+      PGTZ: UTC
+      PGPORT: ${PROD_DB_CONTAINER_PORT}
+      POSTGRES_DB: ${PROD_DB_NAME}
+      POSTGRES_USER: ${PROD_DB_USER}
+      POSTGRES_PASSWORD: ${PROD_DB_PASSWORD}
+    ports:
+      - "${PROD_DB_PORT}:${PROD_DB_CONTAINER_PORT}"
+    volumes:
+      - pg_data_prod:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB} -p $${PGPORT}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ------------------------------ PgAdmin -------------------------------------
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -39,14 +92,24 @@ services:
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     depends_on:
-      hotel-booking-db:
+      hotel-booking-db-dev:
+        condition: service_healthy
+      hotel-booking-db-test:
+        condition: service_healthy
+      hotel-booking-db-prod:
         condition: service_healthy
     networks:
       - hotel-booking-network
 
+# ------------------------------ Volumes ---------------------------------------
+
 volumes:
-  pg_data:
+  pg_data_dev:
+  pg_data_test:
+  pg_data_prod:
   pgadmin_data:
+
+# ------------------------------ Networks --------------------------------------
 
 networks:
   hotel-booking-network:
