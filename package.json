@@ -25,7 +25,9 @@
     "dev": "nodemon src/api.js",
     "dev-dep": "npm install && npm install nodemon morgan eslint eslint-config-prettier eslint-plugin-prettier prettier --save-dev -D",
     "env-var": "cp ./env/.envexample ./.env && echo \"Environment variables injected\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:unit": "vitest run tests/unit",
     "migrations:generate": "sequelize-cli migration:generate --options-path .sequelizerc.cjs --name",
     "migrations:run": "sequelize-cli db:migrate --options-path .sequelizerc.cjs",
     "migrations:revert": "sequelize-cli db:migrate:undo --options-path .sequelizerc.cjs",
@@ -64,6 +66,8 @@
     "eslint-plugin-prettier": "^5.5.7",
     "morgan": "^1.12.1",
     "nodemon": "^3.1.14",
-    "prettier": "^3.9.10"
+    "prettier": "^3.9.10",
+    "supertest": "^7.3.1",
+    "vitest": "^5.1.0"
   }
 }
