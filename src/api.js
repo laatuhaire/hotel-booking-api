@@ -101,10 +101,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
   const httpServer = await api.listen(port, theIPAddress, (req, res) => {
     // Log the server start information to the console
     console.log(`Server on port http://${theIPAddress}:${port}`);
-  });
 
-  const io = initSocket(httpServer);
-  api.set('io', io);
+    // Initialize the WebSocket server and attach it to the HTTP server
+    // Store the Socket.IO instance in the Express application to make it
+    // accessible from the routes and controllers.
+    const io = initSocket(httpServer);
+    api.set('io', io);
+  });
 })();
 
 // Set up all Sequelize models associations before any database query is made
